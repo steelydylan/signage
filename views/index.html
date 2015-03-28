@@ -5,16 +5,13 @@
 	<link rel="stylesheet" href="/css/normalize.css">
 	<link rel="stylesheet" href="/css/acms.css">
 	<link rel="stylesheet" href="/css/site.min.css">
+	<link rel="stylesheet" href="/css/signage.css">
 </head>
 <body>
+<div class="cover"></div>
 <div id="drawArea"></div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="jquery.js"></script>
-<script>
-  var socket = io.connect('http://localhost:3000');
-  socket.on('streamUrgentEntry', function (data) {
-  	$("#drawArea").html(data);
-  });
-</script>
+<script src="/js/signage.js"></script>
 </body>
 </html>

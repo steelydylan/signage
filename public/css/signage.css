@@ -1,0 +1,16 @@
+.cover{
+	position: fixed;
+	top: 0;
+	left:0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0,0,0,0);
+	-webkit-transition: background-color .2s;
+	   -moz-transition: background-color .2s;
+	    -ms-transition: background-color .2s;
+	     -o-transition: background-color .2s;
+	        transition: background-color .2s;
+}
+.cover.state1{
+	background-color: rgba(0,0,0,1);
+}
