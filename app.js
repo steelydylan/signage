@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
   res.render("index.html");
 });
 app.get('/app',function(req,res){
-	res.render("app.html");
+	res.render("app.html",{items:items});
 });
 
 io.on('connection', function (socket) {

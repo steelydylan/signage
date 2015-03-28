@@ -1,28 +1,40 @@
-(function($){
-    $.fn.delayAddClass = function(className,delay){
-        return $(this).delay(delay).queue(function(next){
-            $(this).addClass(className);
-            next();
+  var socket = io.connect('http://localhost:3000');
+  var entryList = new Moon.View({id:"entryList",data:{entry:[]}});
+  var url = "http://localhost/ablogcms";
+  var area = ".acms-entry";
+  var entries = [];
+  socket.on('connect',function(){
+    socket.emit('entryList',{url:url});
+    socket.on('entryList',function(json){
+        json = JSON.parse(json);
+        entryList.data.entry = json.entry_summary;
+        entryList.update();
+        socket.emit('getEntries');
+        socket.on('getEntries',function(data){
+            data.forEach(function(data){
+                $("input[data-eid='"+data.eid+"']").prop("checked",true);
+                entries.push({bid:data.bid,eid:data.eid});
+            })
         });
-    };
-    $.fn.delayRemoveClass = function(className,delay){
-        return $(this).delay(delay).queue(function(next){
-            $(this).removeClass(className);
-            next();
+    });
+  });
+  //サイネージの登録
+  $(document).on("change",".js-checkbox",function(){
+    var bid = $(this).data("bid");
+    var eid = $(this).data("eid");
+    if($(this).prop("checked")){
+        entries.push({bid:bid,eid:eid});
+    }else{
+        entries = entries.filter(function(item){
+            return item.eid != eid;
         });
     }
-})(jQuery);
-
-(function($){
-var socket = io.connect('http://localhost:3000');
-socket.on('streamUrgentEntry', function (data) {
-    $(".cover")
-    .delayAddClass("state1",500)
-    .delayRemoveClass("state1",500)
-    .queue(function(next){
-        console.log("test");
-        $("#drawArea").html(data);
-        next();
-    });
-});
-})(jQuery);
+    console.log(entries);
+    socket.emit("setEntries",{area:area,url:url,fixPath:true,entries:entries});
+  });
+  //サイネージの割り込み送信
+  $(document).on("click",".js-display",function(){
+    var bid = $(this).data("bid");
+    var eid = $(this).data("eid");
+    socket.emit("streamUrgentEntry",{bid:bid,eid:eid,area:area,url:url,fixPath:true});
+  });
