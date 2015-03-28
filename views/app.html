@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Digital Signage</title>
+	<link rel="stylesheet" href="/css/normalize.css">
+	<link rel="stylesheet" href="/css/acms.css">
+	<link rel="stylesheet" href="/css/acms-system.css">
+</head>
+<body>
+	<script id="entryList" type="template">
+		<h2 class="acms-admin-title2">サイネージ設定</h2>
+		<table class="adminTable acms-table-admin acms-table-heading acms-table-hover">
+		<tr>
+			<th>eid</th>
+			<th>タイトル</th>
+			<th>割り込み表示</th>
+			<th>表示</th>
+			<th>編集</th>
+		</tr>
+		<!-- BEGIN entry:loop -->
+			<tr>
+				<td>{entry_id}</td>
+				<td>{entry_title}</td>
+				<td>
+				<button class="acms-btn-admin js-display" data-eid="{entry_id}" data-bid="{blog_id}">表示</button>
+				</td>
+				<td><input type="checkbox"></td>
+				<td><button class="acms-btn-admin">編集</button></td>
+			</tr>
+		<!-- END entry:loop -->
+		</table>
+	</script>
+	<div data-id="entryList"></div>
+<script src="/jquery.js"></script>
+<script src="/moon.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:3000');
+  var entryList = new Moon.View({id:"entryList",data:{entry:[]}});
+  var url = "http://localhost/ablogcms";
+  socket.on('connect',function(){
+  	socket.emit('entryList',{url:url});
+  	socket.on('entryList',function(json){
+  		json = JSON.parse(json);
+  		entryList.data.entry = json.entry_summary;
+  		entryList.update();
+  	});
+  });
+  $(document).on("click",".js-display",function(){
+  	var bid = $(this).data("bid");
+  	var eid = $(this).data("eid");
+  	socket.emit("signage1",{bid:bid,eid:eid,area:".acms-entry",url:url,fixPath:true});
+  });
+</script>
+</body>
+</html>

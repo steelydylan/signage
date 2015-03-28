@@ -1,0 +1,7 @@
+{
+	"devDependencies":{
+		"express":"*",
+		"socket.io":"*",
+		"ejs":"*"
+	}
+}

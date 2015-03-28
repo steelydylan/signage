@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Digital Signage</title>
+	<link rel="stylesheet" href="/css/normalize.css">
+	<link rel="stylesheet" href="/css/acms.css">
+	<link rel="stylesheet" href="/css/site.min.css">
+</head>
+<body>
+<div id="drawArea"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="jquery.js"></script>
+<script>
+  var socket = io.connect('http://localhost:3000');
+  socket.on('signage1', function (data) {
+  	$("#drawArea").html(data);
+  });
+</script>
+</body>
+</html>
