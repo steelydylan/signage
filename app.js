@@ -30,11 +30,11 @@ io.on('connection', function (socket) {
   socket.on('setEntries',function(msg){
   	items = [];
   	msg.entries.forEach(function(item){
-  		request({uri: item.url+"/bid/"+item.bid+"/eid/"+item.eid},function(error,response,body){
+  		request({uri: msg.url+"/bid/"+item.bid+"/eid/"+item.eid},function(error,response,body){
   			var html = util.getEntryHtml(msg,body);
   			items.push({eid:item.eid,html:html});
   		});
-  	})
+  	});
   });
 
   //サイネージに流すエントリーを送信
