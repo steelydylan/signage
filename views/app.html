@@ -24,7 +24,7 @@
 				<td>
 				<button class="acms-btn-admin js-display" data-eid="{entry_id}" data-bid="{blog_id}">表示</button>
 				</td>
-				<td><input type="checkbox"></td>
+				<td><input class="js-checkbox" type="checkbox" data-eid="{entry_id}" data-bid="{blog_id}"></td>
 				<td><button class="acms-btn-admin">編集</button></td>
 			</tr>
 		<!-- END entry:loop -->
@@ -38,18 +38,30 @@
   var socket = io.connect('http://localhost:3000');
   var entryList = new Moon.View({id:"entryList",data:{entry:[]}});
   var url = "http://localhost/ablogcms";
+  var entries = [];
   socket.on('connect',function(){
   	socket.emit('entryList',{url:url});
   	socket.on('entryList',function(json){
   		json = JSON.parse(json);
   		entryList.data.entry = json.entry_summary;
   		entryList.update();
+  		socket.on('getEntries',function(data){
+  			data.forEach(function(data){
+  				$("input[data-eid='"+data.eid+"']").prop("checked",true);
+  				entries.push({bid:data.bid,eid:data.eid});
+  			})
+  		})
   	});
   });
+  //サイネージの登録
+  $(document).on("change",".js-checkbox",function(){
+
+  });
+  //サイネージの割り込み送信
   $(document).on("click",".js-display",function(){
   	var bid = $(this).data("bid");
   	var eid = $(this).data("eid");
-  	socket.emit("signage1",{bid:bid,eid:eid,area:".acms-entry",url:url,fixPath:true});
+  	socket.emit("streamUrgentEntry",{bid:bid,eid:eid,area:".acms-entry",url:url,fixPath:true});
   });
 </script>
 </body>

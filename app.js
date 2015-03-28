@@ -1,5 +1,5 @@
 var app = require('express')();
-var util = require('./util.js');
+var util = require('./util');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var cheerio = require("cheerio");
@@ -16,43 +16,37 @@ app.get('/app',function(req,res){
 	res.render("app.html");
 });
 
-
-
 io.on('connection', function (socket) {
   socket.emit('news', { hello: 'world' });
 
+  //ブログのエントリーリストを取得
   socket.on('entryList',function(msg){
   	request({uri: msg.url+"/iOS/summary.json"}, function(error, response, body){
   		socket.emit("entryList",body);
   	});
   });
 
+  //サイネージに流すエントリーを登録
   socket.on('setEntries',function(msg){
+  	items = [];
   	msg.entries.forEach(function(item){
   		request({uri: item.url+"/bid/"+item.bid+"/eid/"+item.eid},function(error,response,body){
-  			var $ = cheerio.load(body);
-  			if(msg.fixPath){
-  				var host = "http://"+util.getLocation(msg.url).hostname;
-  				//$("")
-  			}
+  			var html = util.getEntryHtml(msg,body);
+  			items.push({eid:item.eid,html:html});
   		});
   	})
   });
 
-  socket.on('signage1', function (msg) {
+  //サイネージに流すエントリーを送信
+  socket.on('getEntries',function(msg){
+  	socket.emit('getEntries',items);
+  });
+
+  //割り込みようのサイネージを取得し送信
+  socket.on('streamUrgentEntry', function (msg) {
   	request({uri: msg.url+"/bid/"+msg.bid+"/eid/"+msg.eid}, function(error, response, body) {
-  		var $ = cheerio.load(body);
-  		if(msg.fixPath){
-  			var host = "http://"+util.getLocation(msg.url).hostname;
-  			$("img").each(function(){
-  				var src = $(this).attr("src");
-  				if(!src.match(/http/)){
-  					$(this).attr("src",host+src);
-  				}
-  			});
-  		}
-  		var data = $(msg.area).html();
-    	socket.broadcast.emit("signage1",data);
+  		var data = util.getEntryHtml(msg,body);
+    	socket.broadcast.emit("streamUrgentEntry",data);
     });
   });
 });

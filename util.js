@@ -12,8 +12,18 @@ module.exports = {
             hash: match[7]
         }
     },
-    getEntryHtml:function(){
-        
+    getEntryHtml:function(msg,body){
+        var $ = cheerio.load(body);
+        if(msg.fixPath){
+            var host = "http://"+this.getLocation(msg.url).hostname;
+            $("img").each(function(){
+                var src = $(this).attr("src");
+                if(!src.match(/http/)){
+                    $(this).attr("src",host+src);
+                }
+            });
+        }
+        return data = $(msg.area).html();
     }
 };
 

@@ -12,7 +12,7 @@
 <script src="jquery.js"></script>
 <script>
   var socket = io.connect('http://localhost:3000');
-  socket.on('signage1', function (data) {
+  socket.on('streamUrgentEntry', function (data) {
   	$("#drawArea").html(data);
   });
 </script>
