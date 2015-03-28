@@ -15,7 +15,7 @@
 
 (function($){
 var socket = io.connect('http://localhost:3000');
-var entries;
+var entries = [];
 var i = 0;
 //割り込み表示用
 var entry = {time:0,html:""};
@@ -31,7 +31,6 @@ socket.on("getEntries",function(items){
 });
 setInterval(function(){
     i = (i + 1) % entries.length;
-    console.log(i);
     $(".cover")
     .delayAddClass("state1",500)
     .delayRemoveClass("state1",500)
