@@ -26,9 +26,6 @@ socket.on("getEntries",function(items){
     temps = items.slice(0);
 });
 setInterval(function(){
-    if(!entries[i]){
-        i = 0;
-    }
     if(i === 0){
         entries = temps.slice(0);
         socket.emit("getEntries");
