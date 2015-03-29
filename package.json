@@ -1,5 +1,10 @@
 {
-	"main": "app.js",
+	"scripts": {
+	    "start": "node app.js"
+	},
+	"engine" :{
+		"node":"v0.10.26"
+	},
 	"devDependencies":{
 		"express":"*",
 		"socket.io":"*",
