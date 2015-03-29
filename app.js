@@ -7,7 +7,7 @@ var request = require("request");
 var items = [];
 app.use(require('express').static(__dirname+'/public'));
 app.engine('html', require('ejs').renderFile);
-server.listen(3000);
+server.listen(process.env.PORT || 3000);
 app.set('view engine','ejs');
 app.get('/', function (req, res) {
   res.render("index.html");
