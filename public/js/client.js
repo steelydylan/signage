@@ -46,7 +46,7 @@ var loop = function(){
         }
         next();
     })
-    .delay(10000)
+    .delay(5000)
     .queue(function(next){
         loop();
         next();
