@@ -18,6 +18,7 @@ var socket = io.connect(socketServer);
 var entries = [];
 var temps = [];
 var i = 0;
+var started = false;
 //割り込み表示用
 var entry = {time:0,html:""};
 //登録されたエントリーを取得
@@ -25,7 +26,7 @@ socket.emit("getEntries");
 socket.on("getEntries",function(items){
     temps = items.slice(0);
 });
-setInterval(function(){
+var loop = function(){
     if(i === 0){
         entries = temps.slice(0);
         socket.emit("getEntries");
@@ -35,15 +36,23 @@ setInterval(function(){
     .delayRemoveClass("state1",500)
     .queue(function(next){
         if(entry.time == 0){
-            $("#drawArea").html(entries[i].html);
-            i = (i + 1) % entries.length;
+            if(entries[i]){
+                $("#drawArea").html(entries[i].html);
+                i = (i + 1) % entries.length;
+            }
         }else{
             $("#drawArea").html(entry.html);
             entry.time = 0;
         }
         next();
+    })
+    .delay(10000)
+    .queue(function(next){
+        loop();
+        next();
     });
-},10000);
+};
+loop();
 //緊急のエントリーを表示
 socket.on('streamUrgentEntry', function (data) {
     entry.time = 1;
