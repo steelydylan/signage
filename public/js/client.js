@@ -14,7 +14,7 @@
 })(jQuery);
 
 (function($){
-var socket = io.connect('http://localhost:3000');
+var socket = io.connect(socketServer);
 var entries = [];
 var i = 0;
 //割り込み表示用

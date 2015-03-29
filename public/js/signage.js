@@ -1,7 +1,5 @@
-  var socket = io.connect('http://localhost:3000');
+  var socket = io.connect(socketServer);
   var entryList = new Moon.View({id:"entryList",data:{entry:[]}});
-  var url = "http://localhost/ablogcms";
-  var area = ".acms-entry";
   var entries = [];
   socket.on('connect',function(){
     socket.emit('entryList',{url:url});
