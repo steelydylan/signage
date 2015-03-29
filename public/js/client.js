@@ -44,13 +44,13 @@ setInterval(function(){
     .queue(function(next){
         if(entry.time == 0){
             $("#drawArea").html(entries[i].html);
+            i = (i + 1) % entries.length;
         }else{
             $("#drawArea").html(entry.html);
             entry.time = 0;
         }
         next();
     });
-    i = (i + 1) % entries.length;
 },10000);
 //緊急のエントリーを表示
 socket.on('streamUrgentEntry', function (data) {
