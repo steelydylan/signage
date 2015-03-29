@@ -31,17 +31,18 @@ socket.on("getEntries",function(items){
 });
 setInterval(function(){
     i = (i + 1) % entries.length;
+    if(!entries[i]){
+        i = 0;
+    }
     $(".cover")
     .delayAddClass("state1",500)
     .delayRemoveClass("state1",500)
     .queue(function(next){
-        if(entries[i]){
-            if(entry.time == 0){
-                $("#drawArea").html(entries[i].html);
-            }else{
-                $("#drawArea").html(entry.html);
-                entry.time = 0;
-            }
+        if(entry.time == 0){
+            $("#drawArea").html(entries[i].html);
+        }else{
+            $("#drawArea").html(entry.html);
+            entry.time = 0;
         }
         next();
     });
