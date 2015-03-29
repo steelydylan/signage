@@ -7,7 +7,7 @@ var request = require("request");
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
-mongoose.connect(process.env.MONGOHQ_URL || "mongodb://localhost:27017/signage");
+mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || "mongodb://localhost:27017/signage");
 mongoose.model('entry',new Schema({
   html:String,
   bid:Number,
