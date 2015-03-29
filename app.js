@@ -32,7 +32,7 @@ io.on('connection', function (socket) {
   	msg.entries.forEach(function(item){
   		request({uri: msg.url+"/bid/"+item.bid+"/eid/"+item.eid},function(error,response,body){
   			var html = util.getEntryHtml(msg,body);
-  			items.push({eid:item.eid,html:html});
+  			items.push({eid:item.eid,bid:item.bid,html:html});
   		});
   	});
   });

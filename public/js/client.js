@@ -22,7 +22,7 @@ var entry = {time:0,html:""};
 //登録されたエントリーを取得
 socket.emit("getEntries");
 socket.on("getEntries",function(items){
-    if(!entries){
+    if(entries.length == 0){//初回のロード時
         if(items[0] && items[0].html){
             $("#drawArea").html(items[0].html);
         }
@@ -35,11 +35,13 @@ setInterval(function(){
     .delayAddClass("state1",500)
     .delayRemoveClass("state1",500)
     .queue(function(next){
-        if(entry.time == 0){
-            $("#drawArea").html(entries[i].html);
-        }else{
-            $("#drawArea").html(entry.html);
-            entry.time = 0;
+        if(entries[i]){
+            if(entry.time == 0){
+                $("#drawArea").html(entries[i].html);
+            }else{
+                $("#drawArea").html(entry.html);
+                entry.time = 0;
+            }
         }
         next();
     });
