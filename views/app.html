@@ -8,12 +8,17 @@
 </head>
 <body>
 	<script id="entryList" type="template">
-		<h2 class="acms-admin-title2">サイネージ設定</h2>
 		<table class="adminTable acms-table-admin acms-table-heading acms-table-hover">
+		<tr>
+			<th>サイネージ設定</th>
+			<th colspan="6"><button id="js-setting" class="acms-btn-admin acms-float-right">変更</button></th>
+		</tr>
 		<tr>
 			<th>eid</th>
 			<th>タイトル</th>
 			<th>割り込み表示</th>
+			<th>表示順</th>
+			<th>表示時間</th>
 			<th>表示</th>
 			<th>編集</th>
 		</tr>
@@ -24,8 +29,14 @@
 				<td>
 				<button class="acms-btn-admin js-display" data-eid="{entry_id}" data-bid="{blog_id}">表示</button>
 				</td>
+				<td>
+					<input class="js-sort" type="text" data-eid="{entry_id}" data-bid="{blog_id}">
+				</td>
+				<td>
+					<input class="js-time" type="text" data-eid="{entry_id}" data-bid="{blog_id}">
+				</td>
 				<td><input class="js-checkbox" type="checkbox" data-eid="{entry_id}" data-bid="{blog_id}"></td>
-				<td><button class="acms-btn-admin">編集</button></td>
+				<td><a class="acms-btn-admin" href="http://{blog_domain}/bid/{blog_id}/eid/{entry_id}/admin/entry_editor/" target="_blank">編集</a></td>
 			</tr>
 		<!-- END entry:loop -->
 		</table>

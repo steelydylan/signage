@@ -56,6 +56,7 @@
     		var loop = /<!-- BEGIN (.+?):loop -->(([\n\r\t]|.)*?)<!-- END (.+?):loop -->/g;
     		var touch = /<!-- BEGIN (\w+):touch#(\w+) -->(([\n\r\t]|.)*?)<!-- END (\w+):touch#(\w+) -->/g;
             var veil = /<!-- BEGIN (\w+):veil -->(([\n\r\t]|.)*?)<!-- END (\w+):veil -->/g;
+            var empty = /<!-- BEGIN (\w+):empty -->(([\n\r\t]|.)*?)<!-- END (\w+):empty -->/g;
     		var that = this;
     		/*ループ文解決*/
     		html = html.replace(loop,function(m,key,val){
@@ -73,13 +74,20 @@
 	    			});
                     /*ベイルブロック解決*/
                     var tmp = tmp.replace(veil,function(m,key2,val,next){
-                        console.log(keys[i][key2],next);
                         if(keys[i][key2]){
                             return next;
                         }else{
                             return "";
                         }
-                    })
+                    });
+                    /*エンプティプロック解決*/
+                    var tmp = tmp.replace(empty,function(m,key2,val,next){
+                        if(!keys[i][key2]){
+                            return next;
+                        }else{
+                            return "";
+                        }
+                    });
 	    			/*ループ内変数解決*/
     				ret += tmp.replace(/{(\w+)}/g,function(n,key3){
     					if(key3 == "i"){

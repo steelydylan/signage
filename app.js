@@ -11,7 +11,9 @@ mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || "mongodb
 mongoose.model('entry',new Schema({
   html:String,
   bid:Number,
-  eid:Number
+  eid:Number,
+  time:{type:Number,default:5000},//何ミリsec表示するか
+  sort:{type:Number,default:1}//表示する順番
 }));
 var entries = mongoose.model('entry');
 app.use(require('express').static(__dirname+'/public'));
@@ -44,6 +46,8 @@ io.on('connection', function (socket) {
     			entry.html = util.getEntryHtml(msg,body);
           entry.bid = item.bid;
           entry.eid = item.eid;
+          entry.time = item.time;
+          entry.sort = item.sort;
     			entry.save();
     		});
     	});
@@ -52,7 +56,7 @@ io.on('connection', function (socket) {
 
   //サイネージに流すエントリーを送信
   socket.on('getEntries',function(msg){
-    entries.find({},function(err,items){
+     entries.find({}).sort({sort:1}).exec(function(err,items){
   	 socket.emit('getEntries',items);
     });
   });

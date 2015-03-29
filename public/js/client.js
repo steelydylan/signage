@@ -20,7 +20,7 @@ var temps = [];
 var i = 0;
 var started = false;
 //割り込み表示用
-var entry = {time:0,html:""};
+var entry = {display:false,html:""};
 //登録されたエントリーを取得
 socket.emit("getEntries");
 socket.on("getEntries",function(items){
@@ -31,31 +31,50 @@ var loop = function(){
         entries = temps.slice(0);
         socket.emit("getEntries");
     }
-    $(".cover")
-    .delayAddClass("state1",500)
-    .delayRemoveClass("state1",500)
-    .queue(function(next){
-        if(entry.time == 0){
-            if(entries[i]){
-                $("#drawArea").html(entries[i].html);
-                i = (i + 1) % entries.length;
-            }
-        }else{
+    var item = entries[i];
+    if(entry.display){//緊急のエントリーがある場合
+        $(".cover")
+        .delayAddClass("state1",500)
+        .delayRemoveClass("state1",500)
+        .queue(function(next){
             $("#drawArea").html(entry.html);
-            entry.time = 0;
-        }
-        next();
-    })
-    .delay(5000)
-    .queue(function(next){
-        loop();
-        next();
-    });
+            entry.display = false;
+            next();
+        })
+        .delay(5000)
+        .queue(function(next){
+            loop();
+            next();
+        });
+    }else if(item){//エントリーが登録されていたら
+        $(".cover")
+        .delayAddClass("state1",500)
+        .delayRemoveClass("state1",500)
+        .queue(function(next){
+            $("#drawArea").html(item.html);
+            i = (i + 1) % entries.length;   
+            next();
+        })
+        .delay(item.time)
+        .queue(function(next){
+            loop();
+            next();
+        });
+    }else{//それ以外なら
+        $(".cover")
+        .delayAddClass("state1",500)
+        .delayRemoveClass("state1",500)
+        .delay(5000)
+        .queue(function(next){
+            loop();
+            next();
+        });
+    }
 };
 loop();
 //緊急のエントリーを表示
 socket.on('streamUrgentEntry', function (data) {
-    entry.time = 1;
+    entry.display = true;
     entry.html = data;
 });
 })(jQuery);

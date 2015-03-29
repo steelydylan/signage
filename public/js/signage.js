@@ -10,19 +10,22 @@
         socket.emit('getEntries');
         socket.on('getEntries',function(data){
             data.forEach(function(data){
-                $("input[data-eid='"+data.eid+"']").prop("checked",true);
-                //entries.push({bid:data.bid,eid:data.eid});
+                $(".js-checkbox[data-eid='"+data.eid+"']").prop("checked",true);
+                $(".js-time[data-eid='"+data.eid+"']").val(data.time || 5000);
+                $(".js-sort[data-eid='"+data.eid+"']").val(data.sort || 1);
             })
         });
     });
   });
   //サイネージの登録
-  $(document).on("change",".js-checkbox",function(){
+  $(document).on("click","#js-setting",function(){
     var entries = [];
     $(".js-checkbox:checked").each(function(){
       var bid = $(this).data("bid");
       var eid = $(this).data("eid");
-      entries.push({bid:bid,eid:eid});
+      var time = $(".js-time[data-eid='"+eid+"']").val();
+      var sort = $(".js-sort[data-eid='"+eid+"']").val();
+      entries.push({bid:bid,eid:eid,time:time,sort:sort});
     });
     socket.emit("setEntries",{area:area,url:url,fixPath:true,entries:entries});
   });
