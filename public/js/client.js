@@ -23,11 +23,6 @@ var entry = {time:0,html:""};
 //登録されたエントリーを取得
 socket.emit("getEntries");
 socket.on("getEntries",function(items){
-    if(temps.length == 0){//初回のロード時
-        if(items[0] && items[0].html){
-            $("#drawArea").html(items[0].html);
-        }
-    }
     temps = items.slice(0);
 });
 setInterval(function(){
