@@ -2,6 +2,8 @@
 	"devDependencies":{
 		"express":"*",
 		"socket.io":"*",
-		"ejs":"*"
+		"ejs":"*",
+		"cheerio":"*",
+		"request":"*"
 	}
 }
