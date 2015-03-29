@@ -16,26 +16,26 @@
 (function($){
 var socket = io.connect(socketServer);
 var entries = [];
+var temps = [];
 var i = 0;
 //割り込み表示用
 var entry = {time:0,html:""};
 //登録されたエントリーを取得
 socket.emit("getEntries");
 socket.on("getEntries",function(items){
-    if(entries.length == 0){//初回のロード時
+    if(temps.length == 0){//初回のロード時
         if(items[0] && items[0].html){
             $("#drawArea").html(items[0].html);
         }
     }
-    entries = items;
+    temps = items.slice(0);
 });
 setInterval(function(){
-    i = (i + 1) % entries.length;
     if(!entries[i]){
         i = 0;
     }
-    console.log(i);
     if(i === 0){
+        entries = temps.slice(0);
         socket.emit("getEntries");
     }
     $(".cover")
@@ -50,6 +50,7 @@ setInterval(function(){
         }
         next();
     });
+    i = (i + 1) % entries.length;
 },10000);
 //緊急のエントリーを表示
 socket.on('streamUrgentEntry', function (data) {
