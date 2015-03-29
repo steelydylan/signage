@@ -14,7 +14,7 @@
 })(jQuery);
 
 (function($){
-var socket = io.connect(socketServer);
+var socket = io.connect(config.socketServer);
 var entries = [];
 var temps = [];
 var i = 0;
@@ -62,9 +62,7 @@ var loop = function(){
         });
     }else{//それ以外なら
         $(".cover")
-        .delayAddClass("state1",500)
-        .delayRemoveClass("state1",500)
-        .delay(5000)
+        .delay(1000)
         .queue(function(next){
             loop();
             next();

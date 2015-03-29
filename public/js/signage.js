@@ -1,6 +1,8 @@
-  var socket = io.connect(socketServer);
+(function($){
+  var socket = io.connect(config.socketServer);
+  var url = config.url;
+  var area = config.area;
   var entryList = new Moon.View({id:"entryList",data:{entry:[]}});
-  //var entries = [];
   socket.on('connect',function(){
     socket.emit('entryList',{url:url});
     socket.on('entryList',function(json){
@@ -35,3 +37,4 @@
     var eid = $(this).data("eid");
     socket.emit("streamUrgentEntry",{bid:bid,eid:eid,area:area,url:url,fixPath:true});
   });
+})(jQuery);
