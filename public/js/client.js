@@ -34,6 +34,10 @@ setInterval(function(){
     if(!entries[i]){
         i = 0;
     }
+    console.log(i);
+    if(i === 0){
+        socket.emit("getEntries");
+    }
     $(".cover")
     .delayAddClass("state1",500)
     .delayRemoveClass("state1",500)
@@ -46,7 +50,6 @@ setInterval(function(){
         }
         next();
     });
-    socket.emit("getEntries");
 },10000);
 //緊急のエントリーを表示
 socket.on('streamUrgentEntry', function (data) {
