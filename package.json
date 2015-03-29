@@ -1,4 +1,5 @@
 {
+	"main": "app.js",
 	"devDependencies":{
 		"express":"*",
 		"socket.io":"*",
