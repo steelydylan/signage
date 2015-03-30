@@ -15,3 +15,40 @@
 .cover.state1{
 	background-color: rgba(0,0,0,1);
 }
+body{
+	position: relative;
+}
+.slide{
+	position: absolute;
+	top: 0;
+	left: 0;
+	-webkit-transition: transform 1s;
+	   -moz-transition: transform 1s;
+	    -ms-transition: transform 1s;
+	     -o-transition: transform 1s;
+	        transition: transform 1s;
+	-webkit-transform: translate(0);
+	   -moz-transform: translate(0);
+	    -ms-transform: translate(0);
+	     -o-transform: translate(0);
+	        transform: translate(0);
+}
+.slide.right{
+	-webkit-transition: none;
+	   -moz-transition: none;
+	    -ms-transition: none;
+	     -o-transition: none;
+	        transition: none;
+	-webkit-transform: translate(100%);
+	   -moz-transform: translate(100%);
+	    -ms-transform: translate(100%);
+	     -o-transform: translate(100%);
+	        transform: translate(100%);
+}
+.slide.left{
+	-webkit-transform: translate(-100%);
+	   -moz-transform: translate(-100%);
+	    -ms-transform: translate(-100%);
+	     -o-transform: translate(-100%);
+	        transform: translate(-100%);
+}
